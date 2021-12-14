@@ -1,0 +1,48 @@
+%%sql
+CREATE TABLE json3
+    USING json
+    OPTIONS (path 'abfss://fs1@jsondataadls.dfs.core.windows.net/json_cricdata/json_unzipped_all/*.json')
+
+
+%%sql
+SELECT
+  meta.data_version as meta_data_version,
+  meta.created as meta_created,
+  meta.revision as meta_revision,
+  
+  info.city as info_city,
+  info.dates[0] as info_dates_01,
+  info.gender as info_gender,
+  info.match_type as info_match_type,
+  
+  info.outcome.winner as info_outcome_winner,
+  info.outcome.by.runs as info_outcome_by_runs,
+  info.outcome.by.wickets as info_outcome_by_wickets,
+  
+  info.overs as info_overs,
+  info.player_of_match[0] as info_player_of_match_01,
+  info.player_of_match[1] as info_player_of_match_02,
+  info.teams[0] as info_teams_01,
+  info.teams[0] as info_teams_02,
+  info.toss.decision as info_toss_decision,
+  info.toss.winner  as info_toss_winner,
+  info.umpires[0] as info_umpires_01,
+  info.umpires[1] as info_umpires_02,
+  info.venue as info_venue
+FROM  json3
+
+
+%%pyspark
+resultsDF=spark.sql("select * from vwJSON02 where info_city = 'Trinidad'")
+resultsDF.write.parquet("abfss://fs1@jsondataadls.dfs.core.windows.net/outputs_shaka/output001/")
+
+
+
+%%spark
+import com.microsoft.spark.sqlanalytics.utils.Constants
+import org.apache.spark.sql.SqlAnalyticsConnector._
+
+
+val dimtable1 =spark.sql("SELECT  meta.created as meta_created, meta.revision as meta_revision,  info.city as info_city,  info.match_type as info_match_type FROM zzjson3")
+dimtable1.write.sqlanalytics("jsondata1.dbo.physicaltable002", Constants.INTERNAL)
+

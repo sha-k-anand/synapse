@@ -1,0 +1,45 @@
+create table dbo.JSONDump01(ID INT IDENTITY(1,1), JSONContent1 VARCHAR(MAX))
+WITH ( HEAP );
+
+
+
+COPY INTO [dbo].JSONDump01 ( JSONContent1 1)
+FROM 'https://jsondataadls.blob.core.windows.net/fs1/json_opendataset/biorxiv_medrxiv/pdf_json/*'
+WITH (
+    FILE_TYPE = 'CSV',
+    CREDENTIAL=(IDENTITY= 'Storage Account Key', SECRET=''),
+    FIELDQUOTE = '',
+    FIELDTERMINATOR='\n',
+    ROWTERMINATOR='\n',
+    ENCODING = 'UTF8',
+    FIRSTROW = 1
+	)
+
+
+create table dbo.JSONDump02(ID INT IDENTITY(1,1), JSONContent1 VARCHAR(MAX))
+WITH ( HEAP );
+
+COPY INTO [dbo].JSONDump02 ( JSONContent1 1)
+FROM 'https://jsondataadls.blob.core.windows.net/fs1/json_opendataset/biorxiv_medrxiv/pdf_json_sample/*'
+WITH (
+    FILE_TYPE = 'CSV',
+    FIELDQUOTE = '',
+    FIELDTERMINATOR='\n',
+    ROWTERMINATOR='\n',
+    ENCODING = 'UTF8',
+    FIRSTROW = 1
+	)
+
+SELECT * FROM [dbo].JSONDump02
+
+SELECT 
+        JSON_VALUE(j.JSONContent1 ,'$.paper_id')   as paper_id,
+		JSON_VALUE(j.JSONContent1  ,'$.metadata.title')   as meta_title,
+		JSON_VALUE(c1.value ,'$.first')   as authors_first,
+		JSON_VALUE(c1.value ,'$.last')    as authors_last,
+		JSON_VALUE(c1.value ,'$.suffix')  as authors_suffix,
+		JSON_VALUE(c1.value ,'$.email')   as authors_email
+		FROM
+[dbo].JSONDump02 j
+	CROSS APPLY OPENJSON(j.JSONContent1,'$.metadata.authors') c1
+

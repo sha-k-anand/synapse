@@ -1,0 +1,34 @@
+SELECT 
+    r.filename() as FileName,
+    r.filepath() as FilePath,
+	[Symbol],	
+	[Name]	,	
+	[LastSale]  ,
+	[MarketCap]	,
+	[IPOyear]	,
+	[Sector]	,
+	[industry]  ,
+	[Summary Quote] 
+    
+FROM 
+    OPENROWSET
+    (
+        BULK 'https://zzshakasynapseadlsgen2.dfs.core.windows.net/stk/companylist/companylist2020.csv',
+        FORMAT='CSV',
+        FIRSTROW=2,
+        FIELDTERMINATOR =',', 
+        ROWTERMINATOR = '\n', 
+        FIELDQUOTE = '"' 
+    ) 
+    WITH 
+    (
+	[Symbol]	VARCHAR(100),
+	[Name]		VARCHAR(100),
+	[LastSale]  VARCHAR(200),
+	[MarketCap]	VARCHAR(20),
+	[IPOyear]	VARCHAR(20),
+	[Sector]	VARCHAR(100),
+	[industry]  VARCHAR(100),
+	[Summary Quote] VARCHAR(200)
+    ) r
+

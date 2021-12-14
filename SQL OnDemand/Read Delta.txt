@@ -1,0 +1,40 @@
+SELECT TOP 100 * 
+FROM OPENROWSET(
+    BULK 'https://tpchdata.dfs.core.windows.net/zztest/Delta_SUPPLIER_part2/',
+    FORMAT= 'delta') as rows
+
+
+SELECT TOP 100 *  
+FROM OPENROWSET(
+    BULK 'https://tpchdata.dfs.core.windows.net/zztest/Delta_SUPPLIER_part2/',
+    FORMAT= 'delta') as rows
+	
+
+
+
+SELECT TOP 100 *  
+FROM OPENROWSET(
+    BULK 'https://tpchdata.dfs.core.windows.net/zztest/Delta_SUPPLIER_part2/',
+    FORMAT= 'delta') as rows
+	WHERE S_PHONE = '10-374-138-6496'
+
+
+
+SELECT S_NATIONKEY ,count(*) as Count1
+FROM OPENROWSET(
+    BULK 'https://tpchdata.dfs.core.windows.net/zztest/Delta_SUPPLIER_part2/',
+    FORMAT= 'delta') as rows
+GROUP BY S_NATIONKEY 
+
+SELECT TOP 100 *  
+FROM OPENROWSET(
+    BULK 'https://tpchdata.dfs.core.windows.net/zztest/Delta_SUPPLIER_part2/',
+    FORMAT= 'delta') as rows
+	WHERE S_COMMENT LIKE '%boost%'
+
+
+
+
+%sql
+UPDATE  zzDelta_SUPPLIER_part1 SET S_COMMENT = 'new update1' WHERE  S_PHONE = '10-374-138-6496'
+

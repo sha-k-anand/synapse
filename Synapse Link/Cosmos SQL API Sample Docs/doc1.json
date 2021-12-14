@@ -1,0 +1,33 @@
+{
+    "meta": {
+        "rowid": "1",
+        "data_version": "0.9",
+        "created": "2015-11-21",
+        "revision": "1"
+    },
+    "info": {
+        "city": "Cardiff",
+        "dates": [
+            "2006-08-30"
+        ],
+        "gender": "male",
+        "match_type": "ODI",
+        "outcome": {
+            "result": "no result"
+        },
+        "overs": "50",
+        "teams": [
+            "England",
+            "Pakistan"
+        ],
+        "toss": {
+            "decision": "field",
+            "winner": "team03"
+        },
+        "umpires": [
+            "BR Doctrove",
+            "IJ Gould"
+        ],
+        "venue": "Sophia Gardens111"
+    }
+}

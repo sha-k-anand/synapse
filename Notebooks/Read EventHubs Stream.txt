@@ -1,0 +1,27 @@
+pyspark
+
+------------------------------------------------------------
+EventHubConnectionString ="Endpoint=sb://zzshakadump1090eventhub001.servicebus.windows.net/;SharedAccessKeyName=zzdump1090azurestream001_fa1090_policy;SharedAccessKey=;EntityPath=hub001"
+ehConf = {
+  'eventhubs.connectionString' : sc._jvm.org.apache.spark.eventhubs.EventHubsUtils.encrypt(EventHubConnectionString)
+}
+------------------------------------------------------------
+df = spark \
+    .readStream \
+    .format("eventhubs") \
+    .options(**ehConf) \
+  .load()
+df1 = df.withColumn("body", df["body"].cast("string"))
+------------------------------------------------------------
+def write2table(df2, epoch_id):
+    df2.write.mode('append').parquet("abfss://synapsefs@zzdump1090adls.dfs.core.windows.net/eventhubdata/data/folder02/")
+------------------------------------------------------------
+df1.writeStream \
+    .outputMode("update") \
+    .trigger(processingTime='5 seconds') \
+    .option("checkpointlocation","abfss://synapsefs@zzdump1090adls.dfs.core.windows.net/eventhubdata/checkpoint02/") \
+    .foreachBatch(write2table) \
+    .start() \
+    .awaitTermination()
+------------------------------------------------------------
+

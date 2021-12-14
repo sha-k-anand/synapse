@@ -1,0 +1,30 @@
+
+	SELECT *
+FROM sys.dm_pdw_exec_requests 
+WHERE 
+status not in ('Completed','Failed','Cancelled')
+  AND session_id <> session_id()
+ORDER BY submit_time DESC;
+
+
+SELECT * FROM sys.dm_pdw_request_steps
+WHERE request_id = 'QID3039'
+ORDER BY step_index;
+
+SELECT waits.session_id,
+      waits.request_id,  
+      requests.command,
+      requests.status,
+      requests.start_time,  
+      waits.type,
+      waits.state,
+      waits.object_type,
+      waits.object_name
+FROM   sys.dm_pdw_waits waits
+   JOIN  sys.dm_pdw_exec_requests requests
+   ON waits.request_id=requests.request_id
+WHERE waits.request_id = 'QID3039'
+ORDER BY waits.object_name, waits.object_type, waits.state;
+
+
+

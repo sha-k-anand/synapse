@@ -1,0 +1,42 @@
+
+%%sql
+CREATE TABLE json4opendata
+(
+metadata struct<authors:array<struct<affiliation:struct<institution:string,laboratory:string,location:struct<country:string,region:string,settlement:string>>,email:string,first:string,last:string,middle:array<string>,suffix:string>>,title:string>,
+abstract array<struct<cite_spans:array<string>,ref_spans:array<string>,section:string,text:string>>,
+back_matter array<struct<cite_spans:array<string>,ref_spans:array<string>,section:string,text:string>>,
+paper_id string,
+body_text array<struct<cite_spans:array<struct<end:bigint,ref_id:string,start:bigint,text:string>>,ref_spans:array<struct<end:bigint,ref_id:string,start:bigint,text:string>>,section:string,text:string>>
+)
+    USING json
+    OPTIONS (multiline=true,path 'abfss://fs1@jsondataadls.dfs.core.windows.net/json_opendataset/',samplingRatio "0.001")
+
+%%sql
+CREATE TABLE json4opendata
+    USING json
+    OPTIONS (multiline=true,path 'abfss://fs1@jsondataadls.dfs.core.windows.net/json_opendataset/sampledata2/',samplingRatio "0.001")
+
+%%sql
+desc json4opendata
+
+%%spark
+val t1 =spark.sql("SELECT * FROM json4opendata")
+t1.printSchema()
+
+%%pyspark
+df=spark.sql("select * from json4opendata")
+df2=df.schema
+print(df2)
+
+
+%%sql
+select  input_file_name(),* from json4opendata1
+
+
+%%pyspark
+resultsDF=spark.sql("SELECT * FROM json4opendata")
+resultsDF.write.parquet("abfss://fs1@lendingclubadls.dfs.core.windows.net/output1/")
+
+%%pyspark
+resultsDF=spark.sql("SELECT * FROM json4opendata ")
+resultsDF.write.mode('overwrite').parquet("abfss://fs1@jsondataadls.dfs.core.windows.net/zzt5/")

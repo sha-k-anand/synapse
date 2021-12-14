@@ -1,0 +1,32 @@
+
+
+CREATE EXTERNAL DATA SOURCE [ds1]  	WITH (		LOCATION   = 'https://synalseadlsdec2020.dfs.core.windows.net/fs1' )
+
+
+SELECT
+    TOP 100 *
+FROM
+    OPENROWSET(
+        BULK 'https://synalseadlsdec2020.dfs.core.windows.net/fs1/folder01/folder02/folder03/part-00002-646eef5c-6dc5-412a-8d17-bf70d49bbe3c-c000.snappy.parquet',
+        FORMAT='PARQUET'
+    ) AS [result]
+
+
+
+SELECT
+    TOP 100 *
+FROM
+    OPENROWSET(
+        BULK '/folder01/folder02/folder03/part-00002-646eef5c-6dc5-412a-8d17-bf70d49bbe3c-c000.snappy.parquet',
+        DATA_SOURCE = 'ds1',
+        FORMAT='PARQUET'
+    ) AS [result]
+
+
+
+--------------
+This is for MSI
+CREATE CREDENTIAL [https://synapseshakaadlsgen2b.dfs.core.windows.net] WITH IDENTITY='Managed Identity'
+
+
+CREATE CREDENTIAL [https://synapseshakaadlsgen2b.dfs.core.windows.net] WITH IDENTITY='Managed Identity'

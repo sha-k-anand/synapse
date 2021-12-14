@@ -1,0 +1,31 @@
+%%sql
+CREATE TABLE IF NOT EXISTS fd_partitioned5
+(
+hex string,
+squawk string,
+flight string,
+lat double,
+lon double,
+validposition bigint,
+altitude bigint,
+vert_rate bigint,
+track bigint,
+validtrack bigint,
+speed bigint,
+messages bigint,
+seen bigint,
+EventProcessedUtcTime timestamp,
+PartitionId bigint,
+EventEnqueuedUtcTime timestamp,
+year int,
+month int,
+day int
+) USING parquet PARTITIONED BY (year,month,day) OPTIONS ( path 'abfss://dump1090winalljson@zzdump1090adls.dfs.core.windows.net/parquet_part/')
+
+
+%%sql
+MSCK REPAIR TABLE  fd_partitioned5
+
+
+%%sql
+select * from fd_partitioned5

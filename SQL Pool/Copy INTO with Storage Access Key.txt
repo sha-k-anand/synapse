@@ -1,0 +1,11 @@
+COPY INTO [dbo].[zzOpenDataStage_JSON] ( FileContent 1)
+FROM 'https://piawareadlssynapse.blob.core.windows.net/primarycontainer/covid_json/*'
+WITH (
+    FILE_TYPE = 'CSV',
+    CREDENTIAL=(IDENTITY= 'Storage Account Key', SECRET=''),
+    FIELDQUOTE = '',
+    FIELDTERMINATOR='|',
+    ROWTERMINATOR='|',
+    ENCODING = 'UTF8',
+    FIRSTROW = 1
+	)

@@ -1,0 +1,20 @@
+%%spark
+import com.microsoft.spark.sqlanalytics.utils.Constants
+import org.apache.spark.sql.SqlAnalyticsConnector._
+
+
+val dim_loan_purpose =spark.sql("SELECT * FROM flightrawdata WHERE flight = 'AAL2331 '")
+dim_loan_purpose.write.sqlanalytics("fasqlpoolshaka.dbo.rawdata_flight_AAL2331", Constants.INTERNAL)
+
+%%spark
+import com.microsoft.spark.sqlanalytics.utils.Constants
+import org.apache.spark.sql.SqlAnalyticsConnector._
+
+val spark_read = spark.read.
+option(Constants.SERVER,"server1.sql.azuresynapse.net").
+option(Constants.USER,"user1").
+option(Constants.PASSWORD,"pwd1").
+synapsesql("sqlpool1.dbo.t1")
+spark_read.show()
+
+https://docs.microsoft.com/en-us/azure/synapse-analytics/spark/synapse-spark-sql-pool-import-export

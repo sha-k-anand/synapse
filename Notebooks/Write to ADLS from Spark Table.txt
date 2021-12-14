@@ -1,0 +1,3 @@
+%%pyspark
+resultsDF=spark.sql("SELECT * FROM lendingclubloan_csv1 ")
+resultsDF.write.parquet("abfss://fs1@lendingclubadls.dfs.core.windows.net/01 Std Lending Club/")

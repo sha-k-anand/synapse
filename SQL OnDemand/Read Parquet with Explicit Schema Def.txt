@@ -1,0 +1,28 @@
+SELECT
+     top 100 *
+FROM
+    OPENROWSET(
+        BULK 'https://zzdump1090adls.dfs.core.windows.net/dump1090winalljson/parquet/2020/10/21/21/*.parquet',
+        FORMAT='PARQUET'
+    ) 
+	with (hex varchar(50),
+          squawk varchar(50),
+		  flight varchar(50),
+		  lat float,
+		  lon float,
+		  validposition bigint,
+		  altitude bigint,
+		  vert_rate bigint,
+		  track bigint,
+		  validtrack bigint,
+		  speed	bigint,
+		  messages bigint,
+		  seen bigint,
+		  EventProcessedUtcTime datetime2(7),
+		  PartitionId bigint,
+		  EventEnqueuedUtcTime datetime2(7)
+         )
+	AS [result]
+
+
+

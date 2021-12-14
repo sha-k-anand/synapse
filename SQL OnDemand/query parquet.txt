@@ -1,0 +1,15 @@
+SELECT
+    TOP 100 *
+FROM
+    OPENROWSET(
+        BULK 'https://zzshakasynapseadlsgen2.dfs.core.windows.net/stk/stkdata/02 std/intraday5min/output/*.parquet',
+        FORMAT = 'Parquet'
+    ) AS [r]
+WHERE
+    r.filepath() in (
+        'https://zzshakasynapseadlsgen2.dfs.core.windows.net/stk/stkdata/02 std/intraday5min/output/part-00000-646eef5c-6dc5-412a-8d17-bf70d49bbe3c-c000.snappy.parquet',
+		'https://zzshakasynapseadlsgen2.dfs.core.windows.net/stk/stkdata/02 std/intraday5min/output/part-00001-646eef5c-6dc5-412a-8d17-bf70d49bbe3c-c000.snappy.parquet'
+    )
+
+
+

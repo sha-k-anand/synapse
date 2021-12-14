@@ -1,0 +1,12 @@
+--abfss path
+	SELECT
+    TOP 100 *
+FROM
+    OPENROWSET(
+        BULK 'abfss://fs1@synalseadlsdec2020.dfs.core.windows.net/folder01/folder02/folder03/part-00002-646eef5c-6dc5-412a-8d17-bf70d49bbe3c-c000.snappy.parquet',
+        FORMAT='PARQUET'
+    ) AS [result]
+
+
+
+

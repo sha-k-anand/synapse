@@ -1,0 +1,16 @@
+SELECT
+       JSON_VALUE (jsonContent, '$.metadata_storage_name') as metadata_storage_name,
+       JSON_VALUE (jsonContent, '$.metadata_author') as metadata_author,
+       JSON_VALUE (jsonContent, '$.metadata_storage_size') as metadata_storage_size,
+       JSON_VALUE (jsonContent, '$.metadata_creation_date') as metadata_creation_date
+FROM
+    OPENROWSET(
+        BULK 'https://kbstoreshaka01.dfs.core.windows.net/cont01/*/objectprojection.json',
+        FORMAT = 'CSV',
+        FIELDQUOTE = '0x0b',
+        FIELDTERMINATOR ='0x0b',
+        ROWTERMINATOR = '0x0b'
+    )
+    WITH (
+        jsonContent varchar(8000)
+    ) AS [result]

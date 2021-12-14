@@ -1,0 +1,6 @@
+df=spark.read.format("avro").load("abfss://fs1@oxygenadlsgen2.dfs.core.windows.net/avro/twitter.avro")
+
+display(df)
+
+df.write.format("avro").save("abfss://fs1@oxygenadlsgen2.dfs.core.windows.net/avro/twitter1.avro")
+

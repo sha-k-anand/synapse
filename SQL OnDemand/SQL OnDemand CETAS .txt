@@ -1,0 +1,37 @@
+CREATE EXTERNAL FILE FORMAT zzFileFormatcsv
+WITH (
+	FORMAT_TYPE = DELIMITEDTEXT,
+	FORMAT_OPTIONS (
+				FIELD_TERMINATOR = ',',
+				STRING_DELIMITER = '',
+				USE_TYPE_DEFAULT = False
+					)
+	);
+GO
+CREATE EXTERNAL DATA SOURCE zzDataSource104  WITH (LOCATION='https://piawareadlssynapse.dfs.core.windows.net/primarycontainer')
+GO
+CREATE EXTERNAL TABLE zztemp8
+    WITH (
+        LOCATION = 'fodler01/folder2/',  
+        DATA_SOURCE = zzDataSource104,  
+        FILE_FORMAT = zzFileFormatcsv  
+)
+    AS 
+SELECT
+	CAST(JSON_VALUE(c1.[value],'$.symbol') as VARCHAR(100)) as symbol,
+    CAST(JSON_VALUE(c1.[value],'$.buy')    as VARCHAR(100)) as buy
+FROM
+OPENROWSET
+(
+	BULK'https://piawareadlssynapse.dfs.core.windows.net/primarycontainer/json_parsing_20200820/AAL.json',
+	FORMAT='CSV',
+	FIELDTERMINATOR ='0x0b', 
+    FIELDQUOTE = '0x0b', 
+	ROWTERMINATOR = '\n'
+) 
+WITH
+(
+    FullLine VARCHAR(MAX)
+) r
+CROSS APPLY 
+	OPENJSON(r.FullLine,'$') c1

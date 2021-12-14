@@ -1,0 +1,3 @@
+-- In User DB
+CREATE USER testlogin01 with password = ''
+EXEC sp_addrolemember  'db_owner','shakaadmin1'

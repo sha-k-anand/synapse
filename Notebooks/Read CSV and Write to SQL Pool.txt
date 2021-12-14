@@ -1,0 +1,17 @@
+%%sql
+CREATE TABLE IF NOT EXISTS aircraftDatabase
+USING csv
+OPTIONS (
+path "abfss://lookupdata@zzdump1090adls.dfs.core.windows.net/aircraftDatabase.csv",
+inferSchema "true",
+header "true"
+)
+
+%%sql
+desc aircraftDatabase
+
+
+%%spark
+val dfaircraftDatabase =spark.sql("SELECT * FROM aircraftDatabase")
+dfaircraftDatabase.write.sqlanalytics("sqlpool001.dbo.TableNew001", Constants.INTERNAL)
+

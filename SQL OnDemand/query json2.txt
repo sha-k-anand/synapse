@@ -1,0 +1,40 @@
+SELECT 
+        s.filename() as FileName,
+        JSON_VALUE(FullLine ,'$.info.match_type_number')   as MatchId,
+	c2.[key]					as matchinnings,
+	c3.[key]					as ballindex,
+	c4.[key]					as ballnum	,
+
+	JSON_VALUE(c2.value,'$.team')			as team,
+	JSON_VALUE(c4.value,'$.batsman')		as batsman,
+	JSON_VALUE(c4.value,'$.non_striker')		as non_striker,
+	JSON_VALUE(c4.value,'$.bowler')			as bowler,
+	JSON_VALUE(c4.value,'$.runs.total')		as runs_total,
+	JSON_VALUE(c4.value,'$.runs.extras')		as runs_extras,
+	JSON_VALUE(c4.value,'$.runs.batsman')		as runs_batsman,
+	JSON_VALUE(c4.value,'$.extras.byes')		as extras_byes,
+	JSON_VALUE(c4.value,'$.extras.wides')		as extras_wides,
+	JSON_VALUE(c4.value,'$.extras.noballs')		as extras_noballs,
+	JSON_VALUE(c4.value,'$.extras.legbyes')		as extras_legbyes,
+	JSON_VALUE(c4.value,'$.wicket.player_out')	as wicket_player_out,
+	JSON_VALUE(c4.value,'$.wicket.kind')		as wicket_kind,
+	JSON_VALUE(c4.value,'$.wicket.fielders[0]') 	as wicket_fielders_01,
+	JSON_VALUE(c4.value,'$.wicket.fielders[1]') 	as wicket_fielders_02
+FROM 
+OPENROWSET
+(
+	BULK 'https://zzshakasynapseadlsgen2.dfs.core.windows.net/json/jsonfiles/*/*',
+	FORMAT='CSV',
+	FIELDTERMINATOR ='0x0b', 
+	FIELDQUOTE = '0x0b', 
+	ROWTERMINATOR = '0x0b'
+) 
+WITH 
+(
+	FullLine VARCHAR(MAX)
+) s
+
+	CROSS APPLY OPENJSON(s.FullLine,'$.innings') c1
+	CROSS APPLY OPENJSON(c1.value,'$') c2
+	CROSS APPLY OPENJSON(c2.value,'$.deliveries') c3
+	CROSS APPLY OPENJSON(c3.value,'$') c4

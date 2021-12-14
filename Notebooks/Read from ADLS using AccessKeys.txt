@@ -1,0 +1,6 @@
+spark.conf.set("fs.azure.account.key.<<accntnamehere>>.blob.core.windows.net", "")
+
+
+df = spark.read.load('wasbs://cont01@accntnamehere.blob.core.windows.net/part-00000-646eef5c-6dc5-412a-8d17-bf70d49bbe3c-c000.snappy.parquet', format='parquet')
+display(df.limit(10))
+

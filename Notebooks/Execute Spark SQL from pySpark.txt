@@ -1,0 +1,5 @@
+%%pyspark
+spark.sql("DROP TABLE IF EXISTS TABLE1")
+spark.sql("DROP TABLE IF EXISTS TABLE2")
+spark.sql("DROP TABLE IF EXISTS TABLE3")
+

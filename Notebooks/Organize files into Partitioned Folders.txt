@@ -1,0 +1,101 @@
+%%sql
+CREATE TABLE IF NOT EXISTS fd USING parquet OPTIONS (path 'abfss://dump1090winalljson@zzdump1090adls.dfs.core.windows.net/parquet/2020/09/08/16/-1386425137_03c7bc6f52d24c68a9e2824baed576bc_1.parquet')
+
+
+
+%%sql
+CREATE TABLE IF NOT EXISTS fd
+(
+hex string,
+squawk string,
+flight string,
+lat double,
+lon double,
+validposition bigint,
+altitude bigint,
+vert_rate bigint,
+track bigint,
+validtrack bigint,
+speed bigint,
+messages bigint,
+seen bigint,
+EventProcessedUtcTime timestamp,
+PartitionId bigint,
+EventEnqueuedUtcTime timestamp
+) USING parquet OPTIONS ( path 'abfss://dump1090winalljson@zzdump1090adls.dfs.core.windows.net/parquet/*/*/*/*')
+
+
+%%sql
+CREATE TABLE IF NOT EXISTS fd_partitioned
+(
+hex string,
+squawk string,
+flight string,
+lat double,
+lon double,
+validposition bigint,
+altitude bigint,
+vert_rate bigint,
+track bigint,
+validtrack bigint,
+speed bigint,
+messages bigint,
+seen bigint,
+EventProcessedUtcTime timestamp,
+PartitionId bigint,
+EventEnqueuedUtcTime timestamp,
+year int,
+month int,
+day int
+) USING parquet PARTITIONED BY (year,month,day) OPTIONS ( path 'abfss://dump1090winalljson@zzdump1090adls.dfs.core.windows.net/parquet_part/')
+
+
+%%sql
+select 
+hex,
+squawk ,
+flight,
+lat ,
+lon ,
+validposition ,
+altitude ,
+vert_rate ,
+track ,
+validtrack ,
+speed ,
+messages ,
+seen ,
+EventProcessedUtcTime ,
+PartitionId ,
+EventEnqueuedUtcTime ,
+year(EventEnqueuedUtcTime) as year,
+month(EventEnqueuedUtcTime) as month,
+day(EventEnqueuedUtcTime) as day
+ from fd
+
+
+
+%%sql
+insert into fd_partitioned
+select 
+hex,
+squawk ,
+flight,
+lat ,
+lon ,
+validposition ,
+altitude ,
+vert_rate ,
+track ,
+validtrack ,
+speed ,
+messages ,
+seen ,
+EventProcessedUtcTime ,
+PartitionId ,
+EventEnqueuedUtcTime ,
+year(EventEnqueuedUtcTime) as year,
+month(EventEnqueuedUtcTime) as month,
+day(EventEnqueuedUtcTime) as day
+ from fd
+

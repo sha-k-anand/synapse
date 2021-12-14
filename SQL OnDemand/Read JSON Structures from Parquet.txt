@@ -1,0 +1,73 @@
+SELECT
+    TOP 100 *
+FROM
+    OPENROWSET(
+        BULK 'https://jsondataadls.dfs.core.windows.net/fs1/json_opendataset_all_parquet/part-00000-11010c69-4f74-415c-909b-0556250d35b2-c000.snappy.parquet',
+        FORMAT='PARQUET'
+    ) 
+	with (paper_id varchar(50),
+          abstract varchar(MAX) '$.abstract',
+		  authors  varchar(MAX) '$.metadata.authors'
+         ) as q 
+
+SELECT
+    TOP 100 *,
+		JSON_VALUE(c1.value ,'$.text')   as abstract_text,
+		JSON_VALUE(c1.value ,'$.section')   as abstract_section
+FROM
+    OPENROWSET(
+        BULK 'https://jsondataadls.dfs.core.windows.net/fs1/json_opendataset_all_parquet/part-00000-11010c69-4f74-415c-909b-0556250d35b2-c000.snappy.parquet',
+        FORMAT='PARQUET'
+    ) 
+	with (paper_id varchar(50),
+          abstract varchar(MAX) '$.abstract'
+         ) as q 
+		 	CROSS APPLY OPENJSON(abstract,'$') c1
+
+
+SELECT
+		SUBSTRING(JSON_VALUE(c1.value,'$.email') ,CHARINDEX('@',JSON_VALUE(c1.value,'$.email'))+1,100) as author_email_domain,
+		COUNT(*) as RowCount1,
+		COUNT(DISTINCT paper_id) as RowCountPaperID1
+FROM
+    OPENROWSET(
+        BULK 'https://jsondataadls.dfs.core.windows.net/fs1/json_opendataset_all_parquet/*.parquet',
+        FORMAT='PARQUET'
+    ) 
+	with (paper_id varchar(50),
+          metadata_authors varchar(MAX) '$.metadata.authors'
+         ) as q 
+    CROSS APPLY OPENJSON(metadata_authors,'$') c1
+WHERE 
+	SUBSTRING(JSON_VALUE(c1.value,'$.email') ,CHARINDEX('@',JSON_VALUE(c1.value,'$.email'))+1,100) IS NOT NULL
+GROUP BY 
+	SUBSTRING(JSON_VALUE(c1.value,'$.email') ,CHARINDEX('@',JSON_VALUE(c1.value,'$.email'))+1,100)
+ORDER BY 2 DESC
+
+
+
+SELECT
+        paper_id,
+		--metadata_authors,
+		JSON_VALUE(c1.value,'$.email') as author_email,
+		JSON_VALUE(c1.value,'$.first') as author_first,
+		JSON_VALUE(c1.value,'$.last')  as author_last,
+		JSON_VALUE(c1.value,'$.affiliation.laboratory')  as affiliation_laboratory,
+		JSON_VALUE(c1.value,'$.affiliation.institution')  as affiliation_institution,
+		JSON_VALUE(c1.value,'$.affiliation.location.settlement')  as affiliation_location_settlement,
+		JSON_VALUE(c1.value,'$.affiliation.location.country')     as affiliation_location_country,
+		SUBSTRING(JSON_VALUE(c1.value,'$.email') ,CHARINDEX('@',JSON_VALUE(c1.value,'$.email'))+1,100) as author_email_domain
+FROM
+    OPENROWSET(
+        BULK 'https://jsondataadls.dfs.core.windows.net/fs1/json_opendataset_all_parquet/*.parquet',
+        FORMAT='PARQUET'
+    ) 
+	with (paper_id varchar(50),
+          metadata_authors varchar(MAX) '$.metadata.authors'
+         ) as q 
+    CROSS APPLY OPENJSON(metadata_authors,'$') c1
+WHERE
+	--SUBSTRING(JSON_VALUE(c1.value,'$.email') ,CHARINDEX('@',JSON_VALUE(c1.value,'$.email'))+1,100)  = 'hotmail.com'
+	--AND
+	JSON_VALUE(c1.value,'$.affiliation.location.country')   = 'India'
+

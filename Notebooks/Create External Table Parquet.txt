@@ -1,0 +1,2 @@
+%%sql
+CREATE TABLE IF NOT EXISTS flightrawdata USING parquet OPTIONS (path 'abfss://dump1090winalljson@zzdump1090adls.dfs.core.windows.net/parquet/2020/09/08/16/-1386425137_03c7bc6f52d24c68a9e2824baed576bc_1.parquet')

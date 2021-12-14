@@ -1,0 +1,6 @@
+%%configure -f
+{
+    "conf": {
+        "spark.jars": "abfss://fs1@adls.dfs.core.windows.net/library/lightgbmlib-3.2.110.jar"
+    }
+}

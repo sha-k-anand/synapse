@@ -1,0 +1,26 @@
+SELECT 
+    r.filename() as FileName,
+    r.filepath() as FilePath,
+    FullLine,
+    JSON_VALUE(FullLine ,'$.info.match_type_number')   as MatchId,
+    JSON_VALUE(FullLine ,'$.info.venue')               as info_venue ,
+	JSON_VALUE(FullLine ,'$.info.competition')         as info_competition,
+	JSON_VALUE(FullLine ,'$.info.dates[0]')            as info_dates,
+	JSON_VALUE(FullLine ,'$.info.gender')              as info_gender,
+    
+   	JSON_VALUE(FullLine ,'$.info.outcome.winner')      as info_outcome_winner,
+	JSON_VALUE(FullLine ,'$.info.outcome.by.runs')     as info_outcome_by_runs,
+	JSON_VALUE(FullLine ,'$.info.outcome.by.wickets')  as info_outcome_by_wickets
+FROM 
+OPENROWSET
+(
+    BULK 'https://zzshakasynapseadlsgen2.dfs.core.windows.net/json/jsonfiles/*/*',
+    FORMAT='CSV',
+    FIELDTERMINATOR ='0x0b', 
+    FIELDQUOTE = '0x0b', 
+    ROWTERMINATOR = '0x0b'
+) 
+WITH 
+(
+    FullLine VARCHAR(MAX)
+) r

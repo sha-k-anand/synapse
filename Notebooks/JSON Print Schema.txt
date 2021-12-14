@@ -1,0 +1,21 @@
+%%sql
+CREATE TABLE json4opendata
+    USING json
+    OPTIONS (multiline=true,path 'abfss://fs1@jsondataadls.dfs.core.windows.net/json_opendataset/biorxiv_medrxiv/*',samplingRatio "0.00001")
+
+
+%%spark
+val t1 =spark.sql("SELECT * FROM json4opendata")
+t1.printSchema()
+
+
+%%sql
+CREATE TABLE json4opendatawithschema
+(
+abstract array<struct<cite_spans:array<string>,ref_spans:array<string>,section:string,text:string>>,
+back_matter array<struct<cite_spans:array<string>,ref_spans:array<string>,section:string,text:string>>,
+paper_id string,
+body_text array<struct<cite_spans:array<struct<end:bigint,ref_id:string,start:bigint,text:string>>,ref_spans:array<struct<end:bigint,ref_id:string,start:bigint,text:string>>,section:string,text:string>>
+)
+    USING json
+    OPTIONS (multiline=true,path 'abfss://fs1@jsondataadls.dfs.core.windows.net/json_opendataset/biorxiv_medrxiv/*')

@@ -1,0 +1,18 @@
+%%spark
+ import com.microsoft.spark.sqlanalytics.utils.Constants
+ import org.apache.spark.sql.SqlAnalyticsConnector._
+
+//** imports no needed
+val spark_read = spark.read.synapsesql("zzbcu01.dbo.t1")
+spark_read.show()
+
+
+
+------------old option ---------------
+
+%%spark
+import com.microsoft.spark.sqlanalytics.utils.Constants
+import org.apache.spark.sql.SqlAnalyticsConnector._
+
+val spark_read = spark.read.sqlanalytics("fasqlpoolshaka.dbo.FlightData_Summary")
+spark_read.show()

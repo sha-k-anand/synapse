@@ -1,0 +1,2 @@
+df  = spark.read.parquet("abfss://zztest@tpchdata.dfs.core.windows.net/SUPPLIER/").coalesce(5)
+df.write.parquet("abfss://zztest@tpchdata.dfs.core.windows.net/SUPPLIER_OUTPUT_mntspn_27/")

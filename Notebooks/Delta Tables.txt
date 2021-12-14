@@ -1,0 +1,32 @@
+%%pyspark
+df = spark.read.format("parquet").load("abfss://dump1090winalljson@zzdump1090adls.dfs.core.windows.net/parquet/2020/*/*/*/*")
+df.show()
+df.write.format("delta").mode("append").save("abfss://dump1090winalljson@zzdump1090adls.dfs.core.windows.net/delta2/")
+
+%%sql
+CREATE  TABLE IF NOT EXISTS fd_delta USING parquet OPTIONS (path 'abfss://dump1090winalljson@zzdump1090adls.dfs.core.windows.net/delta2/')
+
+
+from delta.tables import *
+from pyspark.sql.functions import *
+deltaTable = DeltaTable.forPath(spark, "abfss://dump1090winalljson@zzdump1090adls.dfs.core.windows.net/delta2/")
+deltaTable.delete("validposition=0")
+
+
+
+from delta.tables import *
+from pyspark.sql.functions import *
+deltaTable = DeltaTable.forPath(spark, "abfss://dump1090winalljson@zzdump1090adls.dfs.core.windows.net/delta2/")
+deltaTable.vacuum()
+
+from pyspark.sql.functions import *
+deltaTable = spark.read.format("delta").load("abfss://dump1090winalljson@zzdump1090adls.dfs.core.windows.net/delta2/")
+deltaTable.show()
+print(deltaTable.count())
+
+
+from pyspark.sql.functions import *
+
+deltaTable = spark.read.format("delta").load("abfss://dump1090winalljson@zzdump1090adls.dfs.core.windows.net/delta2/")
+deltaTable.show()
+print(deltaTable.count())

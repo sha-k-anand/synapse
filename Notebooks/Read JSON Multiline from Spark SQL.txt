@@ -1,0 +1,32 @@
+%%sql
+drop table json4opendata
+
+%%sql
+CREATE TABLE json4opendata
+    USING json
+    OPTIONS (multiline=true,path 'abfss://fs1@jsondataadls.dfs.core.windows.net/json_opendataset/biorxiv_medrxiv/*')
+
+%%sql
+desc json4opendata
+
+
+%%sql
+select paper_id,metadata.title from json4opendata limit 100
+
+%%sql
+SELECT paper_id,metadata.title,c1.text,c1.section FROM
+json4opendata LATERAL VIEW EXPLODE(abstract) as c1 limit 100
+
+%%sql
+SELECT paper_id,metadata.title,c2.first,c2.last,c2.suffix,c2.email FROM json4opendata LATERAL VIEW EXPLODE(metadata.authors) as c2 
+
+%%pyspark
+resultsDF=spark.sql("SELECT paper_id,metadata.title,c1.text,c1.section FROM json4opendata LATERAL VIEW EXPLODE(abstract) as c1 ")
+resultsDF.write.parquet("abfss://fs1@jsondataadls.dfs.core.windows.net/outputs_shaka/output004/")
+
+
+
+%%pyspark
+resultsDF=spark.sql("SELECT paper_id,metadata.title,c2.first,c2.last,c2.suffix,c2.email FROM json4opendata LATERAL VIEW EXPLODE(metadata.authors) as c2 ")
+resultsDF.write.parquet("abfss://fs1@jsondataadls.dfs.core.windows.net/outputs_shaka/output005/")
+

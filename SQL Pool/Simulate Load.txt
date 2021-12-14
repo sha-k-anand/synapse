@@ -1,0 +1,59 @@
+#Author : Sha Kanjoor Anandan
+#https://docs.microsoft.com/en-us/sql/connect/python/pyodbc/step-3-proof-of-concept-connecting-to-sql-using-pyodbc?view=sql-server-ver15import os
+
+import datetime 
+import dateutil.parser as dp
+import logging
+import threading
+import time
+import pyodbc 
+
+def thread_Lookupfunction(Symb1,Symb2):
+    print("inside the thread")        
+
+    server = 'tcp:shakasqlserver0001.database.windows.net' 
+    database = 'sqldwgen02' 
+    username = 'user1' 
+    password = 'yourpassword' 
+    cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
+    cursor = cnxn.cursor()
+    #cursor.execute("SELECT GETDATE() as Date2, * from [dbo].[DimDepartmentGroup]") 
+
+    cursor.execute("select [SalesOrderNumber],COUNT(*) as Count1 from [dbo].[FactResellerSales] WHERE YEAR(GETDATE()) <> ProductKey GROUP BY [SalesOrderNumber]")
+    row = cursor.fetchone() 
+    while row: 
+        #print(row[0])
+        row = cursor.fetchone()
+
+
+if __name__ == "__main__":
+    overalllookup_starttime =  datetime.datetime.now()
+    max_parallel_threads_ran=0
+    i=1
+    threads=list()
+
+
+
+    while 1==1:
+        i=i+1
+        Symbol1=""
+        Symbol2=""
+        x= threading.Thread(target=thread_Lookupfunction,args=(Symbol1,Symbol2))
+
+
+        #if  threading.active_count() > max_parallel_threads_ran:
+        #    max_parallel_threads_ran=threading.active_count()
+
+        while threading.active_count() > 30:
+            print("Waiting for threads to freeup. Active threads = ",threading.active_count())
+            time.sleep(1)
+
+        threads.append(x)
+        x.start()
+        #break
+
+
+    while threading.active_count() > 1 :
+        print("Waiting for threads to finish. Active threads = ",threading.active_count())
+        time.sleep(1)
+

@@ -1,0 +1,63 @@
+-- In Master
+CREATE LOGIN shakaadmin WITH password='PasswordHere';
+CREATE USER shakaadmin FROM LOGIN shakaadmin
+
+CREATE USER [user1@microsoft.com]  FROM EXTERNAL PROVIDER
+
+
+-- In User DB
+CREATE USER shakaadmin FROM LOGIN shakaadmin
+EXEC sp_addrolemember 'db_owner', 'shakaadmin'
+EXEC sp_addrolemember 'largerc',  'shakaadmin'
+
+CREATE USER [user1@microsoft.com]  FROM EXTERNAL PROVIDER
+EXEC sp_addrolemember  'db_owner','user1@microsoft.com'
+EXEC sp_droprolemember 'db_owner','user1@microsoft.com'
+
+EXEC sp_addrolemember 'db_exporter',[mike@contoso.com]
+
+--smallrc
+--mediumrc
+--largerc
+--
+smallrc
+mediumrc
+largerc
+xlargerc
+
+Azure SQL
+
+
+Master
+CREATE LOGIN shakaadmin1 WITH password='';
+CREATE USER  shakaadmin1 FROM LOGIN shakaadmin1
+
+Uesr DB
+CREATE USER  shakaadmin1 FROM LOGIN shakaadmin1
+EXEC sp_addrolemember  'db_owner','shakaadmin1'
+
+MSI
+CREATE USER zzshakaazurepurview  FROM EXTERNAL PROVIDER
+EXEC sp_addrolemember  'db_owner','zzshakaazurepurview'
+
+GRANT VIEW SERVER STATE TO shakaadmin1
+
+GRANT VIEW SERVER STATE TO shakaadmin1
+GRANT CONNECT SQL TO shakaadmin1
+GRANT VIEW SERVER STATE TO shakaadmin1
+GRANT VIEW ANY DEFINITION  TO shakaadmin1
+
+
+withotu login - directly in DB
+------------------------
+CREATE USER  etlloaduser03 WITHOUT LOGIN
+EXEC sp_addrolemember 'db_owner', 'etlloaduser03'
+EXEC sp_addrolemember 'xlargerc',  'etlloaduser03'
+
+
+
+CREATE WORKLOAD GROUP	   [DataLoads]         WITH (MIN_PERCENTAGE_RESOURCE = 90      ,CAP_PERCENTAGE_RESOURCE = 100      ,REQUEST_MIN_RESOURCE_GRANT_PERCENT = 90);
+CREATE WORKLOAD CLASSIFIER [wgcDataLoadLogin]  WITH (WORKLOAD_GROUP = 'DataLoads'       ,MEMBERNAME = 'etlloaduser01');
+
+EXECUTE AS USER = 'etlloaduser01';
+

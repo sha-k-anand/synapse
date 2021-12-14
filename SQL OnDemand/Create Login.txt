@@ -1,0 +1,10 @@
+use master
+CREATE LOGIN  [user1@domain.com] FROM EXTERNAL PROVIDER
+alter role db_datareader ADD MEMBER [user1@domain.com]
+GO
+CREATE USER [user1@domain.com] FROM LOGIN [user1@domain.com];
+alter role db_datareader Add MEMBER [user1@domain.com]
+
+--------
+
+CREATE USER [nikohli@microsoft.com] FROM EXTERNAL PROVIDER

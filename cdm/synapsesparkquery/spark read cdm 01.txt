@@ -1,0 +1,10 @@
+container = "powerbi"
+storageAccountName = "pbiadlsshaka.dfs.core.windows.net"
+
+readDf = (spark.read.format("com.microsoft.cdm")
+  .option("storage", storageAccountName)
+  .option("manifestPath", container + "/dfws02/df02/model.json")
+  .option("entity", "DimSalesTerritory")
+  .load())
+
+display(readDf)

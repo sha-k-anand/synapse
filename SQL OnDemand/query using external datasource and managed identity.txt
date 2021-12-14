@@ -1,0 +1,15 @@
+CREATE MASTER KEY
+CREATE DATABASE SCOPED CREDENTIAL [sqlondemand1] WITH IDENTITY='Managed Identity' 
+CREATE EXTERNAL DATA SOURCE DataLakeSource001 WITH (LOCATION = 'https://zzshakaadlszz1.dfs.core.windows.net',CREDENTIAL = sqlondemand1);
+
+
+SELECT
+    TOP 100 *
+FROM
+    OPENROWSET(
+        BULK '/cont1/folder01/part-00000-646eef5c-6dc5-412a-8d17-bf70d49bbe3c-c000.snappy.parquet',
+		DATA_SOURCE = 'DataLakeSource001',
+        FORMAT='PARQUET'
+    ) AS [result]
+
+

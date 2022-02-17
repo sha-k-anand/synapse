@@ -11,3 +11,5 @@ CREATE LOGIN shakaadmin WITH password='';
 CREATE USER shakaadmin FROM LOGIN shakaadmin
 EXEC sp_addrolemember 'db_owner', 'shakaadmin'
 EXEC sp_addrolemember 'largerc',  'shakaadmin'
+
+EXEC sp_addrolemember 'xlargerc',  'shakaadmin'

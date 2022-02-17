@@ -1,0 +1,7 @@
+--Not yet tested
+spark.conf.set("fs.azure.sas.cont01.zzshakastorageadlsgen2.blob.core.windows.net", "")
+
+
+df = spark.read.load('wasbs://cont01@zzshakastorageadlsgen2.blob.core.windows.net/folder01/folder02/part-00000-646eef5c-6dc5-412a-8d17-bf70d49bbe3c-c000.snappy.parquet', format='parquet')
+display(df.limit(10))
+

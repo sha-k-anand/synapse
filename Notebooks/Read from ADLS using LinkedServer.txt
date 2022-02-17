@@ -1,0 +1,9 @@
+%%pyspark
+# Python code
+spark.conf.set("spark.storage.synapse.linkedServiceName", "crosstenant")
+spark.conf.set("fs.azure.account.auth.type", "SAS")
+spark.conf.set("fs.azure.sas.token.provider.type", "com.microsoft.azure.synapse.tokenlibrary.LinkedServiceBasedSASProvider")
+
+df = spark.read.parquet('abfss://cont01@zzshakastorageadlsgen2.dfs.core.windows.net/folder01/folder02')
+
+df.show()

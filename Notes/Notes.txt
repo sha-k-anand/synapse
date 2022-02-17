@@ -1,0 +1,4 @@
+Vnet enabled | Dep No | Linked Server MVET| Connect to Storage without PE | Works
+
+Dep can only go via PE - even if its in the same tenant
+Dep No, vnet Yes -  You cannot have non vnet IR

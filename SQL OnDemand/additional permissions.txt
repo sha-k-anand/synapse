@@ -1,0 +1,4 @@
+CREATE LOGIN [shaka@demo.onmicrosoft.com] FROM EXTERNAL PROVIDER;
+
+grant connect any database to [shaka@demo.onmicrosoft.com]
+grant select all user securables to [shaka@demo.onmicrosoft.com]

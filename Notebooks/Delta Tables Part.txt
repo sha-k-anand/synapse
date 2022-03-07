@@ -1,0 +1,24 @@
+df = spark.read.load('abfss://tpch-sf1000-consolidated@tpchdata.dfs.core.windows.net/SUPPLIER/', format='parquet')
+display(df.limit(10))
+
+
+df.write.format("delta").partitionBy("S_NATIONKEY").save("abfss://zztest@tpchdata.dfs.core.windows.net/Delta_SUPPLIER_temp100/")
+
+%%sql
+CREATE TABLE zzDelta_SUPPLIER_temp100
+(
+S_SUPPKEY bigint, 
+S_NAME string,
+S_ADDRESS string,
+S_NATIONKEY bigint,
+S_PHONE string,
+S_ACCTBAL decimal(9,2) ,
+S_COMMENT string
+)
+USING DELTA  PARTITIONED BY (S_NATIONKEY) OPTIONS (path 'abfss://zztest@tpchdata.dfs.core.windows.net/Delta_SUPPLIER_temp100/')
+
+%%sql
+select count(*) from zzDelta_SUPPLIER_temp100
+
+%%sql
+UPDATE zzDelta_SUPPLIER_temp100 SET S_COMMENT = 'test1112' WHERE S_NATIONKEY = 23

@@ -1,0 +1,4 @@
+create user      [zzshaazpurview001] from external provider
+grant connect to [zzshaazpurview001]
+
+ALTER ROLE db_datareader 	ADD MEMBER [zzshaazpurview001];  

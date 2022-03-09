@@ -22,3 +22,22 @@ select count(*) from zzDelta_SUPPLIER_temp100
 
 %%sql
 UPDATE zzDelta_SUPPLIER_temp100 SET S_COMMENT = 'test1112' WHERE S_NATIONKEY = 23
+
+
+
+spark.sql("SET spark.databricks.delta.retentionDurationCheck.enabled = false")
+spark.sql("VACUUM `zzDelta_SUPPLIER_part1` RETAIN 0 HOURS").show()
+
+
+-- serverless SQL
+SELECT
+     result.filepath(1) as partfolder,
+	 COUNT(DISTINCT result.filename()) as FileCount,
+	 count(*) as RowCount1
+FROM
+    OPENROWSET(
+        BULK 'https://tpchdata.dfs.core.windows.net/tpch-sf1000-synapse-deltalake/SUPPLIER2/*/*',
+        FORMAT = 'PARQUET'
+    ) AS [result]
+GROUP BY result.filepath(1)
+ORDER BY 1

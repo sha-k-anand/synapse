@@ -8,7 +8,7 @@ CREATE USER [user1@microsoft.com]  FROM EXTERNAL PROVIDER
 -- In User DB
 CREATE USER shakaadmin FROM LOGIN shakaadmin
 EXEC sp_addrolemember 'db_owner', 'shakaadmin'
-EXEC sp_addrolemember 'largerc',  'shakaadmin'
+EXEC sp_addrolemember 'largerc',  'shakaadmin27
 
 CREATE USER [user1@microsoft.com]  FROM EXTERNAL PROVIDER
 EXEC sp_addrolemember  'db_owner','user1@microsoft.com'

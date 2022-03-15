@@ -13,3 +13,45 @@ EXEC sp_addrolemember 'db_owner', 'shakaadmin'
 EXEC sp_addrolemember 'largerc',  'shakaadmin'
 
 EXEC sp_addrolemember 'xlargerc',  'shakaadmin'
+
+
+--------------------------------serverless
+-- In master
+CREATE LOGIN [user01@microsoft.com]  FROM EXTERNAL PROVIDER
+
+
+-- In user DB
+DROP USER [user01@microsoft.com] 
+CREATE USER user01  FROM LOGIN [user01@microsoft.com] 
+ALTER ROLE db_owner ADD member user01;
+
+
+-------------------dedicated pool
+-- In master
+drop login [user001 @microsoft.com]
+
+CREATE LOGIN [user001 @microsoft.com]  FROM EXTERNAL PROVIDER
+
+
+-- In user DB
+DROP USER [user001 @microsoft.com] 
+CREATE USER [user001 @microsoft.com]  FROM LOGIN [user001 @microsoft.com] 
+EXEC sp_addrolemember 'db_ddladmin','user001 @microsoft.com'
+----------------------------
+-- In master
+drop login [user0001@microsoft.com]
+
+CREATE LOGIN [user0001@microsoft.com]  FROM EXTERNAL PROVIDER
+
+
+-- In user DB
+DROP USER [user0001@microsoft.com] 
+CREATE USER [user0001 @microsoft.com]  FROM LOGIN [user0001 @microsoft.com] 
+EXEC sp_addrolemember 'db_ddladmin','user0001@microsoft.com'
+EXEC sp_addrolemember 'db_datareader','user0001@microsoft.com'
+EXEC sp_addrolemember 'db_datawriter','user0001@microsoft.com'
+
+GRANT ADMINISTER DATABASE BULK OPERATIONS TO [user0001@microsoft.com]
+
+EXEC sp_addrolemember 'db_owner','user0001@microsoft.com'
+EXEC sp_droprolemember 'db_owner','user0001@microsoft.com'

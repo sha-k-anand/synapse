@@ -1,3 +1,11 @@
 -- In User DB
 CREATE USER testlogin01 with password = ''
 EXEC sp_addrolemember  'db_owner','shakaadmin1'
+
+
+
+
+User DB
+CREATE USER [shak@xyz.onmicrosoft.com]  FROM LOGIN [shak@xyz.onmicrosoft.com]
+EXEC sp_addrolemember  'db_owner','shak@xyz.onmicrosoft.com'
+

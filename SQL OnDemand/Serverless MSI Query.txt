@@ -1,0 +1,18 @@
+CREATE MASTER KEY ENCRYPTION BY PASSWORD = '';
+
+CREATE DATABASE SCOPED CREDENTIAL WorkspaceIdentity WITH IDENTITY = 'Managed Identity';
+GO
+
+CREATE EXTERNAL DATA SOURCE ds01 WITH (    LOCATION = 'https://zzadlsgen2.dfs.core.windows.net/cont01/folder01/',    CREDENTIAL = WorkspaceIdentity);
+
+CREATE EXTERNAL FILE FORMAT FileFormat01Parquet WITH (  FORMAT_TYPE = PARQUET );
+
+
+SELECT
+    TOP 100 *
+FROM
+    OPENROWSET(
+        BULK '/',
+        FORMAT = 'PARQUET',
+		DATA_SOURCE = 'ds01'
+    ) AS [result]

@@ -17,6 +17,18 @@ WITH (
 
     CREDENTIAL=(IDENTITY= 'Managed Identity'),
 
+---------------------------------------------------Multi Line JSON document-------------------------
+COPY INTO [dbo].JSONDump01 ( JSONContent1 1)
+FROM 'https://zzcnrdatalake.dfs.core.windows.net/fway/workday_api_data.json'
+WITH (
+    FILE_TYPE = 'CSV',
+    FIELDQUOTE = '',
+    FIELDTERMINATOR='0x0b',
+    ROWTERMINATOR='0x0b',
+    ENCODING = 'UTF8',
+    FIRSTROW = 1
+	)
+---------------------------------------------------
 
 create table dbo.JSONDump02(ID INT IDENTITY(1,1), JSONContent1 VARCHAR(MAX))
 WITH ( HEAP );

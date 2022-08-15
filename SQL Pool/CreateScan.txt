@@ -1,0 +1,1 @@
+select 'CREATE STATISTICS [stat_'+ Table_Name +'_'+ Column_Name +']		ON dbo.'+ Table_Name +'('+ Column_Name +')	WITH FULLSCAN;' from Information_schema.columns where table_name ='tmpbloombergSecuritiesAll_DF'

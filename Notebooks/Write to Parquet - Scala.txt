@@ -1,0 +1,2 @@
+%%spark
+spark_read.write.parquet("abfss://cnrdata@zzcnrdatalake.dfs.core.windows.net/bcp_out_parquet/BBSecurityDD/")

@@ -1,0 +1,11 @@
+%%spark
+ import com.microsoft.spark.sqlanalytics.utils.Constants
+ import org.apache.spark.sql.SqlAnalyticsConnector._
+
+//** imports no needed
+val spark_read = spark.read.synapsesql("db.dbo.table02")
+spark_read.show()
+
+
+%%spark
+spark_read.write.parquet("abfss://")

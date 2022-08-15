@@ -1,1 +1,8 @@
 bcp shakaMyDB.dbo.Table_1 out C:\zzTemp2\bcp\SampleHandleQuotes.dat  -S localhost -T    -c -t 0x0100
+
+bcp AdvWorksDataMart.dbo.DimAccount out C:\zzTemp2\SampleHandleQuotes.dat  -S shakasqlserver0001.database.windows.net -U user01 -P pdw    -c -t 0x0100
+
+
+--------
+
+bcp db1.dbo.Security in  C:\bcp\Security.dat  -S localhost -T    -c -t 0x0100

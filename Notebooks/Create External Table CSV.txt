@@ -1,3 +1,5 @@
+delimiter "\u0001"
+
 %%sql
 CREATE TABLE IF NOT EXISTS aircraftDatabase
 USING csv

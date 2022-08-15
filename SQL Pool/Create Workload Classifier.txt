@@ -1,0 +1,19 @@
+CREATE USER  etlloaduser01  WITHOUT LOGIN
+EXEC sp_addrolemember 'db_owner', 'etlloaduser01'
+--EXEC sp_addrolemember 'xlargerc', 'etlloaduser01'
+GO
+IF EXISTS (SELECT 1 FROM sys.workload_management_workload_classifiers where name = 'wgcDataLoadLogin')
+BEGIN
+	DROP WORKLOAD   CLASSIFIER [wgcDataLoadLogin]
+END
+
+IF EXISTS (SELECT 1 FROM sys.workload_management_workload_groups      where name = 'DataLoads')
+BEGIN
+	DROP WORKLOAD GROUP [DataLoads]
+END
+GO
+CREATE WORKLOAD GROUP	   [DataLoads]         WITH (MIN_PERCENTAGE_RESOURCE = 90      ,CAP_PERCENTAGE_RESOURCE = 100      ,REQUEST_MIN_RESOURCE_GRANT_PERCENT = 90);
+CREATE WORKLOAD CLASSIFIER [wgcDataLoadLogin]  WITH (WORKLOAD_GROUP = 'DataLoads'       ,MEMBERNAME = 'etlloaduser01');
+
+
+EXECUTE AS USER = 'etlloaduser01';

@@ -1,0 +1,9 @@
+
+COPY INTO dbo.t3
+FROM 'https://.dfs.core.windows.net//output/security/'
+WITH
+(
+	 FILE_TYPE = 'PARQUET'
+	,CREDENTIAL = ( IDENTITY = 'Managed Identity' )
+	,AUTO_CREATE_TABLE = 'ON'
+)

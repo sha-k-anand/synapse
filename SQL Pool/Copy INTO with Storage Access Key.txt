@@ -9,3 +9,17 @@ WITH (
     ENCODING = 'UTF8',
     FIRSTROW = 1
 	)
+
+
+ CREDENTIAL = (IDENTITY = 'Managed Identity'),
+ CREDENTIA L= (IDENTITY = 'Storage Account Key', SECRET=''),
+ CREDENTIAL = (IDENTITY = 'Shared Access Signature',  SECRET='<key>')
+
+
+COPY INTO [myCOPYDemoTable]
+FROM 'https://myaccount.blob.core.windows.net/customerdatasets/folder1/lineitem.parquet'
+WITH (
+    FILE_TYPE = 'Parquet',
+    CREDENTIAL = ( IDENTITY = 'Shared Access Signature',  SECRET='<key>'),
+    AUTO_CREATE_TABLE = 'ON'
+)

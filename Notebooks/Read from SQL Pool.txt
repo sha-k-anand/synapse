@@ -8,7 +8,7 @@ spark_read.show()
 
 
 
-------------old option ---------------
+------------old option ---------------still works
 
 %%spark
 import com.microsoft.spark.sqlanalytics.utils.Constants

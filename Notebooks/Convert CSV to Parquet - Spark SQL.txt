@@ -1,0 +1,14 @@
+%%sql
+CREATE TABLE IF NOT EXISTS lendingclubloan_csv1
+USING csv
+OPTIONS (
+path "abfss://fs1@lendingclubadls001.dfs.core.windows.net/01 Raw  Lending Club/loan.csv",
+inferSchema "true",
+header "true",
+samplingRatio "0.00001"
+)
+
+
+%%pyspark
+resultsDF=spark.sql("SELECT * FROM lendingclubloan_csv1 ")
+resultsDF.write.parquet("abfss://fs1@lendingclubadls001.dfs.core.windows.net/01 Std Lending Club_Demo4/")

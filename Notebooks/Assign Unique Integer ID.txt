@@ -1,0 +1,2 @@
+%%sql
+select  monotonically_increasing_id(),* from lendingclubloan_csv1 limit 20

@@ -1,0 +1,2 @@
+df <- read.df('abfss://fs1@lendingclubadls001.dfs.core.windows.net/files/csv/companylist20201.csv', 'csv', header="true")
+display(df)

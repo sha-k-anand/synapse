@@ -1,3 +1,9 @@
+%%sql
+CREATE TABLE zzDelta_Loan1
+USING DELTA OPTIONS (path 'abfss://fs1@lendingclubadls001.dfs.core.windows.net/delta/t1/')
+
+
+
 df = spark.read.load('abfss://tpch-sf1000-consolidated@tpchdata.dfs.core.windows.net/SUPPLIER/', format='parquet')
 display(df.limit(10))
 

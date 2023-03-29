@@ -1,3 +1,6 @@
+https://github.com/bertwagner/SQLServer/blob/master/JSONtoSQLGenerator.sql
+
+
 create table dbo.JSONDump01(ID INT IDENTITY(1,1), JSONContent1 VARCHAR(MAX))
 WITH ( HEAP );
 

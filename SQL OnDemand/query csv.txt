@@ -1,3 +1,6 @@
+--PARSER_VERSION='2.0',
+
+
 SELECT 
     r.filename() as FileName,
     r.filepath() as FilePath,

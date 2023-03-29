@@ -51,3 +51,34 @@ DROP DATABASE SCOPED CREDENTIAL msi_cred
 
 
 select * from sys.credentials
+
+
+
+
+------------------------------------------------------------
+parquet
+
+DROP EXTERNAL DATA SOURCE [ext_datasource1]
+DROP EXTERNAL FILE FORMAT [ext_parquet] 
+DROP EXTERNAL TABLE [dbo].[ExternalSUPPLIER]
+
+CREATE EXTERNAL DATA SOURCE [ext_datasource1]  WITH (TYPE = HADOOP, LOCATION = N'abfss://tpch-sf1000-databricks-deltalake@tpchdata02.dfs.core.windows.net')
+CREATE EXTERNAL FILE FORMAT [ext_parquet] WITH (FORMAT_TYPE = PARQUET)
+
+CREATE EXTERNAL TABLE [dbo].[ExternalSUPPLIER]
+(
+	[S_SUPPKEY] [bigint] NULL,
+	[S_NAME] [varchar](25) NULL,
+	[S_ADDRESS] [varchar](40) NULL,
+	[S_NATIONKEY] [bigint] NULL,
+	[S_PHONE] [varchar](15) NULL,
+	[S_ACCTBAL] [decimal](12, 2) NULL,
+	[S_COMMENT] [varchar](101) NULL
+)
+WITH (DATA_SOURCE = [ext_datasource1],LOCATION = N'/SUPPLIER2NoPart/',FILE_FORMAT = [ext_parquet],REJECT_TYPE = VALUE,REJECT_VALUE = 0)
+
+SELECT TOP 100 * FROM [dbo].[ExternalSUPPLIER]
+
+
+
+SELECT TOP 100 * FROM [dbo].[ExternalSUPPLIER]

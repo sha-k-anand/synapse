@@ -24,3 +24,13 @@ WITH
 (
     FullLine VARCHAR(MAX)
 ) r
+
+
+
+-----------
+    FIELDTERMINATOR ='0x0b', 
+    FIELDQUOTE = '0x0c', 
+    PARSER_VERSION='2.0',
+    ROWTERMINATOR = '\n' - Newline
+    ROWTERMINATOR = '\r'  CR LF
+    ROWTERMINATOR = '0x0A' 

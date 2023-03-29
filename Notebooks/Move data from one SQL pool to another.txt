@@ -1,0 +1,10 @@
+%%spark
+ import com.microsoft.spark.sqlanalytics.utils.Constants
+ import org.apache.spark.sql.SqlAnalyticsConnector._
+
+val spark_read = spark.read.synapsesql("sqlpool01.tpch_sf1000.region")
+
+
+spark_read.write.sqlanalytics("sqlpool02.dbo.region_Test001")
+
+

@@ -17,3 +17,32 @@ CREATE WORKLOAD CLASSIFIER [wgcDataLoadLogin]  WITH (WORKLOAD_GROUP = 'DataLoads
 
 
 EXECUTE AS USER = 'etlloaduser01';
+
+-----------------
+
+
+
+CREATE WORKLOAD GROUP wgSample 
+WITH
+  ( MIN_PERCENTAGE_RESOURCE = 26                -- integer value
+    , REQUEST_MIN_RESOURCE_GRANT_PERCENT = 3.25 -- factor of 26 (guaranteed a minimum of 8 concurrency)
+    , CAP_PERCENTAGE_RESOURCE = 100 )
+
+	select * from [sys].[dm_workload_management_workload_groups_stats] 
+
+
+CREATE WORKLOAD GROUP      [DataLoads01]         WITH (MIN_PERCENTAGE_RESOURCE = 0      ,CAP_PERCENTAGE_RESOURCE = 80      ,REQUEST_MIN_RESOURCE_GRANT_PERCENT = 20);
+
+select * from [sys].[dm_workload_management_workload_groups_stats] 
+
+CREATE WORKLOAD CLASSIFIER [wgcDataLoadLogin]  WITH (WORKLOAD_GROUP = 'DataLoads01'       ,MEMBERNAME = 'user01@microsoft.com');
+CREATE WORKLOAD CLASSIFIER [wgcDataLoadLogin]  WITH (WORKLOAD_GROUP = 'DataLoads02'       ,MEMBERNAME = 'user02@microsoft.com');
+CREATE WORKLOAD CLASSIFIER [wgcDataLoadLogin]  WITH (WORKLOAD_GROUP = 'DataLoads03'       ,MEMBERNAME = 'user03@microsoft.com');
+
+
+SELECT request_id,session_id,command,resource_allocation_percentage
+FROM sys.dm_pdw_exec_requests 
+WHERE 
+--status not in ('Completed','Failed','Cancelled')
+  session_id <> session_id()
+ORDER BY submit_time DESC;

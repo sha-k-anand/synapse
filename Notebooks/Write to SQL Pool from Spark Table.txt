@@ -6,6 +6,21 @@ import org.apache.spark.sql.SqlAnalyticsConnector._
 val dim_loan_purpose =spark.sql("SELECT * FROM flightrawdata WHERE flight = 'AAL2331 '")
 dim_loan_purpose.write.sqlanalytics("fasqlpoolshaka.dbo.rawdata_flight_AAL2331", Constants.INTERNAL)
 
+-------------------------------- for the above---------------------
+import com.microsoft.spark.sqlanalytics.utils.Constants
+import org.apache.spark.sql.SqlAnalyticsConnector._
+dim_loan_purpose: org.apache.spark.sql.DataFrame = [C_CUSTKEY: bigint, C_NAME: string ... 6 more fields]
+warning: one deprecation; for details, enable `:setting -deprecation' or `:replay -deprecation'
+
+------------------------------------------------------------------------------------------------
+
+%%spark
+--preferred option
+val df =spark.sql("SELECT * FROM ZZTEST02 limit 100 ")
+df.write.option(Constants.SERVER, "tpcsynapse01.sql.azuresynapse.net").mode("overwrite").synapsesql("sqlpool01.dbo.tabletarget01")
+
+
+------------------------------------
 %%spark
 import com.microsoft.spark.sqlanalytics.utils.Constants
 import org.apache.spark.sql.SqlAnalyticsConnector._

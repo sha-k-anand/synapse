@@ -28,3 +28,4 @@ ORDER BY waits.object_name, waits.object_type, waits.state;
 
 
 
+KILL 'sid233'

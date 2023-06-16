@@ -1,4 +1,11 @@
 %%pyspark
+resultsDF=spark.sql("SELECT * FROM zzDelta_Supplier ")
+resultsDF.write.format("delta").mode("append").save("abfss://tpch-sf1000-databricks-deltalake@tpchdata02.dfs.core.windows.net/SUPPLIERNoPartjuly16")
+
+
+
+
+%%pyspark
 df = spark.read.format("parquet").load("abfss://dump1090winalljson@zzdump1090adls.dfs.core.windows.net/parquet/2020/*/*/*/*")
 df.show()
 df.write.format("delta").mode("append").save("abfss://dump1090winalljson@zzdump1090adls.dfs.core.windows.net/delta2/")
@@ -30,3 +37,5 @@ from pyspark.sql.functions import *
 deltaTable = spark.read.format("delta").load("abfss://dump1090winalljson@zzdump1090adls.dfs.core.windows.net/delta2/")
 deltaTable.show()
 print(deltaTable.count())
+
+

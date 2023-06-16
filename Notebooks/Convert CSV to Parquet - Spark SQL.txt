@@ -12,3 +12,14 @@ samplingRatio "0.00001"
 %%pyspark
 resultsDF=spark.sql("SELECT * FROM lendingclubloan_csv1 ")
 resultsDF.write.parquet("abfss://fs1@lendingclubadls001.dfs.core.windows.net/01 Std Lending Club_Demo4/")
+
+
+--Create parquet Spark SQL Table
+%%sql
+CREATE TABLE IF NOT EXISTS dbfromspark02.zztestparquet
+USING parquet
+OPTIONS (
+path "abfss://tpch-sf1000-consolidated@tpchdata02.dfs.core.windows.net/CUSTOMER/part-00000-cc341466-1a5d-44f6-902a-2a3851ba0872-c000.snappy.parquet"
+)
+
+

@@ -1,0 +1,21 @@
+create table CompanyList 
+(
+    Symbol          VARCHAR(100),
+    CompanyName     VARCHAR(100),
+    LastSale        VARCHAR(100),
+    MarketCap       VARCHAR(100),
+    IPOYear         VARCHAR(100),
+    Sector          VARCHAR(100),
+    industry        VARCHAR(100),
+    SummaryQuote    VARCHAR(100)
+)
+
+COPY INTO dbo.CompanyList(Symbol,CompanyName,LastSale,MarketCap,IPOYear,Sector,industry,SummaryQuote)
+FROM 'https://zztpchsynapseadls.dfs.core.windows.net/fs1/temp02/companylist20201.csv'
+WITH (
+    FILE_TYPE = 'CSV',
+    FIELDQUOTE = '"',
+    FIELDTERMINATOR=',',
+    ENCODING = 'UTF8',
+    FIRSTROW = 2
+	)

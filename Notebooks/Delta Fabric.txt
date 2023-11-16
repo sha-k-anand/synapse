@@ -1,0 +1,11 @@
+df = spark.read.format("delta").load("abfss://zzshakatridentmay1@onelake.dfs.fabric.microsoft.com/wh01.Datawarehouse/Tables/dbo/NATION")
+display(df)
+
+
+%%pyspark
+resultsDF=spark.sql("SELECT * FROM usstock_csv2 ")
+resultsDF.write.format("delta").mode("append").save("Tables/stockhourlydata")
+
+
+df1.write.mode("overwrite").option("overwriteSchema", "true").format("delta").save("Final_SalesLT_Product")
+df.write.mode("overwrite").format("delta").save("Tables/Final_SalesLT_Product")

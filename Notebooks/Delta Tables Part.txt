@@ -10,6 +10,8 @@ display(df.limit(10))
 
 df.write.format("delta").partitionBy("S_NATIONKEY").save("abfss://zztest@tpchdata.dfs.core.windows.net/Delta_SUPPLIER_temp100/")
 
+df.write.format("delta").partitionBy("S_NATIONKEY","S_NATIONKEY2").save("abfss://zztest@tpchdata.dfs.core.windows.net/Delta_SUPPLIER_temp100/")
+
 %%sql
 CREATE TABLE zzDelta_SUPPLIER_temp100
 (

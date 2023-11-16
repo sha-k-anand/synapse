@@ -26,3 +26,14 @@ UPDATE zzDelta_SUPPLIER_part1 SET S_COMMENT = 'test1111' WHERE S_NATIONKEY = 23
 
 %%sql
 select * from zzDelta_SUPPLIER_part1  WHERE S_NATIONKEY = 23
+
+
+---Fabric
+spark.conf.set("spark.sql.parquet.vorder.enabled", "true")
+spark.conf.set("spark.microsoft.delta.optimizeWrite.enabled", "true")
+spark.conf.set("spark.microsoft.delta.optimizeWrite.binSize", "1073741824")
+src = "Files/copieddata/LINEITEM"
+dst = "Tables/LINEITEM"
+df = spark.read.parquet(src)
+df.write.mode("overwrite").format("delta").save(dst)
+

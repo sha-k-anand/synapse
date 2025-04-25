@@ -1,0 +1,8 @@
+%%sql
+ALTER TABLE calendar SET TBLPROPERTIES (delta.enableChangeDataFeed = true)
+
+%%sql
+describe history calendar;
+
+%%sql
+SELECT * FROM table_changes('calendar', 3) order by _commit_timestamp DESC;
